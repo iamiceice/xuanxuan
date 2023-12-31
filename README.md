@@ -13,5 +13,5 @@ go build -ldflags -H=windowsgui
 MIT
 
 ### 捐助
-![](https://github.com/iamiceice/xuanxuan/donate/mm.png)
-![](https://github.com//iamiceice/xuanxuan/donate/22.jpg)
+![](https://github.com/iamiceice/xuanxuan/blob/main/donate/mm.png)
+![](https://github.com//iamiceice/xuanxuan/blob/main/donate/22.jpg)
