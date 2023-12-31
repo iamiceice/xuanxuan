@@ -14,4 +14,4 @@ MIT
 
 ### 捐助
 ![](https://github.com/iamiceice/xuanxuan/blob/main/donate/mm.png)
-![](https://github.com//iamiceice/xuanxuan/blob/main/donate/22.jpg)
+![](https://github.com/iamiceice/xuanxuan/blob/main/donate/22.jpg)
