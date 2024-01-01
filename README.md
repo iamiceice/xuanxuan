@@ -7,13 +7,13 @@
 - 欢迎合作开发
 
 ### 编译
-- 使用如下命令，可生成不带DOS黑窗口的exe文件
+使用如下命令，可生成不带DOS黑窗口的exe文件
 ```
 go build -ldflags -H=windowsgui
 ```
 
 ### 计划
-- 根据TMW施放技能
+根据TMW施放技能
 
 ### License
 MIT
