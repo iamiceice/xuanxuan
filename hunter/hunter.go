@@ -18,36 +18,30 @@ var ctx, cancel = context.WithCancel(context.Background())
 var 目标数量 string = "AOE"
 
 const (
-	闪电箭 int64 = 1000 + iota
-	闪电链
-	神器
-	岩浆图腾
-	幽灵步
-	始源之潮
-	烈焰震击
-	火元素
-	熔岩爆裂
-	大地震击
-	回收图腾
-	地震术
-	切换目标
+	多重射击 int64 = 1000 + iota
+	倒刺射击
+	杀戮命令
+	狂野怒火
+	死亡飞轮
+	夺命射击
+	束缚射击
+	荒野的召唤
+	眼镜蛇射击
+	打断
 )
 
 // 技能和按键映射
 var SpellKeyMap = map[int64][]string{
-	闪电箭:  []string{"8"},
-	闪电链:  []string{"9"},
-	神器:   []string{"5", "shift"},
-	幽灵步:  []string{"上滚", "control"},
-	始源之潮: []string{"6", "shift"},
-	烈焰震击: []string{"6"},
-	火元素:  []string{"下滚", "shift"},
-	熔岩爆裂: []string{"6", "ctrl"},
-	大地震击: []string{"5", "ctrl"},
-	岩浆图腾: []string{"9", "shift"},
-	回收图腾: []string{"9", "shift"},
-	地震术:  []string{"9", "ctrl"},
-	切换目标: []string{"5"},
+	多重射击:  []string{"9"},
+	束缚射击:  []string{"9", "ctrl"},
+	倒刺射击:  []string{"7"},
+	杀戮命令:  []string{"8"},
+	狂野怒火:  []string{"5", "shift"},
+	死亡飞轮:  []string{"9", "shift"},
+	夺命射击:  []string{"8", "ctrl"},
+	荒野的召唤: []string{"4", "shift"},
+	眼镜蛇射击: []string{"6"},
+	打断:    []string{"0"},
 }
 
 func main() {
@@ -78,13 +72,17 @@ func shortcutkey() {
 			if ev.Rawcode == 111 {
 				os.Exit(0)
 			}
+			//按快捷键“0”为打断
+			if ev.Rawcode == 48 {
+
+			}
 			//按快捷键“1”为单体
 			if ev.Rawcode == 49 {
 				目标数量 = "单体"
 			}
-			//按快捷键“2”为1-3目标
+			//按快捷键“2”为
 			if ev.Rawcode == 50 {
-				目标数量 = "1-3"
+
 			}
 			//按快捷键“3”为AOE
 			if ev.Rawcode == 51 {
@@ -97,39 +95,25 @@ func shortcutkey() {
 // 脚本开始
 func start() {
 	for {
-		//根据暂停flag判断是否暂停
 		timedelay()
 		//脚本开始时间
 		//timestart := time.Now()
 		if 目标数量 == "单体" {
-			cast(火元素)
-			cast(烈焰震击)
-			cast(切换目标)
-			cast(始源之潮)
-			cast(岩浆图腾)
-			cast(熔岩爆裂)
-			cast(神器)
-			cast(大地震击)
-			cast(闪电箭)
-		} else if 目标数量 == "1-3" {
-			cast(火元素)
-			cast(烈焰震击)
-			cast(切换目标)
-			cast(始源之潮)
-			cast(岩浆图腾)
-			cast(熔岩爆裂)
-			cast(地震术)
-			cast(闪电链)
+			cast(荒野的召唤)
+			cast(死亡飞轮)
+			cast(狂野怒火)
+			cast(倒刺射击)
+			cast(杀戮命令)
+			cast(眼镜蛇射击)
+			cast(夺命射击)
 		} else {
-			cast(火元素)
-			cast(烈焰震击)
-			cast(切换目标)
-			cast(始源之潮)
-			cast(岩浆图腾)
-			cast(熔岩爆裂)
-			cast(神器)
-			cast(地震术)
-			cast(闪电链)
+			cast(荒野的召唤)
+			cast(死亡飞轮)
+			cast(狂野怒火)
+			cast(多重射击)
+			cast(倒刺射击)
+			cast(杀戮命令)
+			cast(夺命射击)
 		}
 		//脚本结束时间
 		//timeend := time.Now()
@@ -146,17 +130,18 @@ func cast(spell int64) {
 	// 技能对应的控制键序列，如ctrl shift alt
 	k1n := key[1:]
 	// 如果是涉及鼠标滚轮，单独处理
-	if k0 == "上滚" {
+	switch k0 {
+	case "上滚":
 		k0 = "up"
-		// 鼠标滚轮
-		wheelkey(k0, k1n)
-	} else if k0 == "下滚" {
+	case "下滚":
 		k0 = "down"
-		wheelkey(k0, k1n)
-	} else {
-		// 正常按键处理（无滚轮操作）
-		presskey(k0, k1n)
+	case "左滚":
+		k0 = "left"
+	case "右滚":
+		k0 = "right"
+	default:
 	}
+	presskey(k0, k1n)
 }
 
 // 按下按键
@@ -168,10 +153,13 @@ func presskey(k0 string, k1n []string) {
 // robotgo的鼠标滚轮操作
 func wheelkey(k0 string, k1n []string) {
 	for _, v := range k1n {
+		//按下按键
 		robotgo.KeyToggle(v, "down")
 	}
+	//滚动鼠标
 	robotgo.ScrollDir(1, k0)
 	for _, v := range k1n {
+		//抬起按键
 		robotgo.KeyToggle(v, "up")
 	}
 }
