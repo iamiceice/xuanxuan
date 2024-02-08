@@ -27,11 +27,13 @@ const (
 	束缚射击
 	荒野的召唤
 	眼镜蛇射击
+	饰品药水
 	打断
 )
 
 // 技能和按键映射
 var SpellKeyMap = map[int64][]string{
+	//以下按键中不能有“0”，”1“，”2“，”3“！！！
 	多重射击:  []string{"9"},
 	束缚射击:  []string{"9", "ctrl"},
 	倒刺射击:  []string{"7"},
@@ -41,7 +43,8 @@ var SpellKeyMap = map[int64][]string{
 	夺命射击:  []string{"8", "ctrl"},
 	荒野的召唤: []string{"4", "shift"},
 	眼镜蛇射击: []string{"6"},
-	打断:    []string{"0"},
+	饰品药水:  []string{"=", "shift", "alt"},
+	打断:    []string{"5"},
 }
 
 func main() {
@@ -74,15 +77,15 @@ func shortcutkey() {
 			}
 			//按快捷键“0”为打断
 			if ev.Rawcode == 48 {
-
+				cast(打断)
 			}
 			//按快捷键“1”为单体
 			if ev.Rawcode == 49 {
 				目标数量 = "单体"
 			}
-			//按快捷键“2”为
+			//按快捷键“2”为爆发
 			if ev.Rawcode == 50 {
-
+				目标数量 = "爆发"
 			}
 			//按快捷键“3”为AOE
 			if ev.Rawcode == 51 {
@@ -98,16 +101,19 @@ func start() {
 		timedelay()
 		//脚本开始时间
 		//timestart := time.Now()
-		if 目标数量 == "单体" {
-			cast(荒野的召唤)
+		switch 目标数量 {
+		case "单体":
 			cast(死亡飞轮)
 			cast(狂野怒火)
 			cast(倒刺射击)
 			cast(杀戮命令)
 			cast(眼镜蛇射击)
 			cast(夺命射击)
-		} else {
+		case "爆发":
 			cast(荒野的召唤)
+			cast(饰品药水)
+			目标数量 = "AOE"
+		default:
 			cast(死亡飞轮)
 			cast(狂野怒火)
 			cast(多重射击)
