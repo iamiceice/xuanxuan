@@ -27,24 +27,30 @@ const (
 	束缚射击
 	荒野的召唤
 	眼镜蛇射击
+	意气风发
 	饰品药水
+	大红瓶
+	治疗石
 	打断
 )
 
 // 技能和按键映射
 var SpellKeyMap = map[int64][]string{
-	//以下按键中不能有“0”，”1“，”2“，”3“！！！
-	多重射击:  []string{"9"},
-	束缚射击:  []string{"9", "ctrl"},
-	倒刺射击:  []string{"7"},
-	杀戮命令:  []string{"8"},
+	//以下按键中不能有快捷键对应按键，比如：不能有"4","6","0","7","8","9"！！！
+	多重射击:  []string{"l"},
+	束缚射击:  []string{"l", "ctrl"},
+	倒刺射击:  []string{"j"},
+	杀戮命令:  []string{"k"},
 	狂野怒火:  []string{"5", "shift"},
-	死亡飞轮:  []string{"9", "shift"},
-	夺命射击:  []string{"8", "ctrl"},
-	荒野的召唤: []string{"4", "shift"},
-	眼镜蛇射击: []string{"6"},
-	饰品药水:  []string{"=", "shift", "alt"},
-	打断:    []string{"5"},
+	死亡飞轮:  []string{"l", "shift"},
+	夺命射击:  []string{"k", "ctrl"},
+	荒野的召唤: []string{"u", "shift"},
+	眼镜蛇射击: []string{"o"},
+	意气风发:  []string{","},
+	饰品药水:  []string{"[", "ctrl", "shift"},
+	大红瓶:   []string{";"},
+	治疗石:   []string{"'"},
+	打断:    []string{"."},
 }
 
 func main() {
@@ -62,34 +68,47 @@ func shortcutkey() {
 	for ev := range hooks {
 		//	监听键盘弹起
 		if ev.Kind == hook.KeyDown {
-			//按快捷键“-”开始脚本
-			if ev.Rawcode == 109 {
+			//以下是快捷键，不能与施放技能的按键相同！！！
+			//按快捷键“4”开始脚本
+			if ev.Rawcode == 52 {
 				stop = false
 				go start()
 			}
-			//按快捷键“+”暂停脚本
-			if ev.Rawcode == 107 {
+			//按快捷键“6”暂停脚本
+			if ev.Rawcode == 54 {
 				stop = true
 			}
-			//按快捷键“/”停止脚本软件
-			if ev.Rawcode == 111 {
+			//按快捷键小键盘“-”停止脚本软件
+			if ev.Rawcode == 109 {
 				os.Exit(0)
 			}
 			//按快捷键“0”为打断
 			if ev.Rawcode == 48 {
 				cast(打断)
 			}
-			//按快捷键“1”为单体
-			if ev.Rawcode == 49 {
+			//按快捷键“8”为单体
+			if ev.Rawcode == 56 {
 				目标数量 = "单体"
 			}
-			//按快捷键“2”为爆发
-			if ev.Rawcode == 50 {
+			//按快捷键“7”为爆发
+			if ev.Rawcode == 55 {
 				目标数量 = "爆发"
 			}
-			//按快捷键“3”为AOE
-			if ev.Rawcode == 51 {
+			//按快捷键“9”为AOE
+			if ev.Rawcode == 57 {
 				目标数量 = "AOE"
+			}
+			//按快捷键小键盘"4"大红瓶
+			if ev.Rawcode == 100 {
+				cast(大红瓶)
+			}
+			//按快捷键小键盘"5"术士治疗石35
+			if ev.Rawcode == 101 {
+				cast(治疗石)
+			}
+			//按快捷键小键盘"6"加血34
+			if ev.Rawcode == 102 {
+				cast(意气风发)
 			}
 		}
 	}
