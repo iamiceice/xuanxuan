@@ -131,7 +131,6 @@ func start() {
 		case "爆发":
 			cast(荒野的召唤)
 			cast(饰品药水)
-			目标数量 = "AOE"
 		default:
 			cast(死亡飞轮)
 			cast(狂野怒火)
