@@ -98,16 +98,16 @@ func shortcutkey() {
 			if ev.Rawcode == 57 {
 				目标数量 = "AOE"
 			}
-			//按快捷键小键盘"4"大红瓶
-			if ev.Rawcode == 100 {
+			//按快捷键小键盘"7"大红瓶
+			if ev.Rawcode == 103 {
 				cast(大红瓶)
 			}
 			//按快捷键小键盘"5"术士治疗石35
 			if ev.Rawcode == 101 {
 				cast(治疗石)
 			}
-			//按快捷键小键盘"6"加血34
-			if ev.Rawcode == 102 {
+			//按快捷键小键盘"9"加血34
+			if ev.Rawcode == 105 {
 				cast(意气风发)
 			}
 		}
