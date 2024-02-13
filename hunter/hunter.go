@@ -2,23 +2,16 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"github.com/go-vgo/robotgo"
 	hook "github.com/robotn/gohook"
 	"os"
-	"sync"
-	"time"
+	"runtime"
 )
 
 // 脚本循环的频率
 // const FREQUENCY int64 = 10
-var ch = make(chan bool)
-var run bool
-var flag bool
-var lock sync.Mutex
-
-// 创建一个管道，用于接收按键事件
-var pipe = make(chan byte)
-var char byte
+var stop bool
 
 // 生成可以取消的 context
 var ctx, cancel = context.WithCancel(context.Background())
@@ -61,12 +54,11 @@ var SpellKeyMap = map[int64][]string{
 }
 
 func main() {
-	//技能循环
-	go loop()
-	//处理快捷键
-	go fork()
 	//快捷键
 	shortcutkey()
+	fmt.Println("start之前")
+	//暂停flag
+	stop = true
 }
 
 // 快捷键
@@ -79,14 +71,12 @@ func shortcutkey() {
 			//以下是快捷键，不能与施放技能的按键相同！！！
 			//按快捷键“4”开始脚本
 			if ev.Rawcode == 52 {
-				ch <- true
+				stop = false
+				go start()
 			}
 			//按快捷键“6”暂停脚本
 			if ev.Rawcode == 54 {
-				lock.Lock()
-				run = false
-				lock.Unlock()
-				ch <- false
+				stop = true
 			}
 			//按快捷键小键盘“-”停止脚本软件
 			if ev.Rawcode == 109 {
@@ -96,90 +86,63 @@ func shortcutkey() {
 			if ev.Rawcode == 48 {
 				cast(打断)
 			}
-			//按快捷键“7”为爆发
-			if ev.Rawcode == 55 {
-				pipe <- '7'
-			}
-			//按快捷键“8”为"单体"
+			//按快捷键“8”为单体
 			if ev.Rawcode == 56 {
 				目标数量 = "单体"
 			}
-			//按快捷键“9”为"AOE"
+			//按快捷键“7”为爆发
+			if ev.Rawcode == 55 {
+				目标数量 = "爆发"
+			}
+			//按快捷键“9”为AOE
 			if ev.Rawcode == 57 {
 				目标数量 = "AOE"
 			}
-			//按快捷键小键盘"1"大红瓶
-			if ev.Rawcode == 49 {
-				pipe <- '1'
+			//按快捷键小键盘"7"大红瓶
+			if ev.Rawcode == 103 {
+				cast(大红瓶)
 			}
-			//按快捷键小键盘"2"术士治疗石35
-			if ev.Rawcode == 50 {
-				pipe <- '2'
+			//按快捷键小键盘"5"术士治疗石35
+			if ev.Rawcode == 101 {
+				cast(治疗石)
 			}
-			//按快捷键小键盘"3"加血34
-			if ev.Rawcode == 51 {
-				pipe <- '3'
+			//按快捷键小键盘"9"加血34
+			if ev.Rawcode == 105 {
+				cast(意气风发)
 			}
 		}
 	}
 }
 
-func loop() {
+// 脚本开始
+func start() {
 	for {
+		timedelay()
 		//脚本开始时间
 		//timestart := time.Now()
-		if run == true {
-			switch 目标数量 {
-			case "单体":
-				cast(死亡飞轮)
-				cast(狂野怒火)
-				cast(倒刺射击)
-				cast(杀戮命令)
-				cast(眼镜蛇射击)
-				cast(夺命射击)
-			default:
-				cast(死亡飞轮)
-				cast(狂野怒火)
-				cast(多重射击)
-				cast(倒刺射击)
-				cast(杀戮命令)
-				cast(夺命射击)
-			}
-		} else {
-			run = <-ch
+		switch 目标数量 {
+		case "单体":
+			cast(死亡飞轮)
+			cast(狂野怒火)
+			cast(倒刺射击)
+			cast(杀戮命令)
+			cast(眼镜蛇射击)
+			cast(夺命射击)
+		case "爆发":
+			cast(荒野的召唤)
+			cast(饰品药水)
+			目标数量 = "AOE"
+		default:
+			cast(死亡飞轮)
+			cast(狂野怒火)
+			cast(多重射击)
+			cast(倒刺射击)
+			cast(杀戮命令)
+			cast(夺命射击)
 		}
 		//脚本结束时间
 		//timeend := time.Now()
 		//delay(timestart, timeend)
-		//根据暂停flag判断是否暂停
-	}
-}
-
-func fork() {
-	for {
-		char = <-pipe
-		lock.Lock()
-		flag = run
-		run = false
-		lock.Unlock()
-		ch <- false
-		time.Sleep(time.Second)
-		switch char {
-		case '7':
-			cast(饰品药水)
-			cast(荒野的召唤)
-		case '1':
-			cast(大红瓶)
-		case '2':
-			cast(治疗石)
-		case '3':
-			cast(意气风发)
-		default:
-
-		}
-		if flag {
-			ch <- true
-		}
 	}
 }
 
@@ -249,3 +212,16 @@ func spell2key(spell int64) (key []string) {
 //	time.Sleep(time.Duration(delaytime * 1000))
 //	slog.Info("Sleep:", time.Duration(delaytime*1000))
 //}
+
+// 根据暂停flag判断是否暂停
+func timedelay() {
+	for {
+		if stop {
+			// 如果暂停flag为真，退出施法脚本协程，暂停
+			runtime.Goexit()
+		} else {
+			// 如果暂停flag为假，正常运行脚本
+			break
+		}
+	}
+}
