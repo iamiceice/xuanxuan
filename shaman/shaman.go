@@ -22,19 +22,23 @@ var char byte
 
 // 生成可以取消的 context
 var ctx, cancel = context.WithCancel(context.Background())
-var 目标数量 string = "AOE"
 
 const (
-	多重射击 int64 = 1000 + iota
-	倒刺射击
-	杀戮命令
-	狂野怒火
-	死亡飞轮
-	夺命射击
-	束缚射击
-	荒野的召唤
-	眼镜蛇射击
-	意气风发
+	闪电箭 int64 = 1000 + iota
+	闪电链
+	切换目标
+	始源之潮
+	烈焰震击
+	冰霜震击
+	风暴打击
+	野性狼魂
+	毁灭闪电
+	霜刃打击
+	熔岩猛击
+	元素冲击
+	裂地术
+	毁灭之风
+	治疗之涌
 	饰品药水
 	大红瓶
 	治疗石
@@ -43,21 +47,25 @@ const (
 
 // 技能和按键映射
 var SpellKeyMap = map[int64][]string{
-	//以下按键中不能有快捷键对应按键，比如：不能有"4","6","0","7","8","9"！！！
-	多重射击:  []string{"l"},
-	束缚射击:  []string{"l", "ctrl"},
-	倒刺射击:  []string{"j"},
-	杀戮命令:  []string{"k"},
-	狂野怒火:  []string{"5", "shift"},
-	死亡飞轮:  []string{"l", "shift"},
-	夺命射击:  []string{"k", "ctrl"},
-	荒野的召唤: []string{"u", "shift"},
-	眼镜蛇射击: []string{"o"},
-	意气风发:  []string{","},
-	饰品药水:  []string{"[", "ctrl", "shift"},
-	大红瓶:   []string{";"},
-	治疗石:   []string{"'"},
-	打断:    []string{"."},
+	闪电箭:  []string{"k"},
+	闪电链:  []string{"l"},
+	始源之潮: []string{"o", "shift"},
+	冰霜震击: []string{"u"},
+	烈焰震击: []string{"o"},
+	风暴打击: []string{"5", "ctrl"},
+	野性狼魂: []string{"l", "alt"},
+	毁灭闪电: []string{"l", "ctrl"},
+	霜刃打击: []string{"k", "alt"},
+	熔岩猛击: []string{"k", "ctrl"},
+	元素冲击: []string{"u", "ctrl"},
+	裂地术:  []string{"l", "shift"},
+	毁灭之风: []string{"5", "shift"},
+	治疗之涌: []string{"-"},
+	打断:   []string{"."},
+	切换目标: []string{"5"},
+	饰品药水: []string{"[", "ctrl", "shift"},
+	大红瓶:  []string{";"},
+	治疗石:  []string{"'"},
 }
 
 func main() {
@@ -96,17 +104,17 @@ func shortcutkey() {
 			if ev.Rawcode == 48 {
 				cast(打断)
 			}
-			//按快捷键“7”为爆发
+			//按快捷键“7”为饰品药水
 			if ev.Rawcode == 55 {
 				pipe <- '7'
 			}
-			//按快捷键“8”为"单体"
+			//按快捷键“8”为闪电箭
 			if ev.Rawcode == 56 {
-				目标数量 = "单体"
+				pipe <- '8'
 			}
-			//按快捷键“9”为"AOE"
+			//按快捷键“9”为闪电链
 			if ev.Rawcode == 57 {
-				目标数量 = "AOE"
+				pipe <- '9'
 			}
 			//按快捷键小键盘"1"大红瓶
 			if ev.Rawcode == 49 {
@@ -124,27 +132,20 @@ func shortcutkey() {
 	}
 }
 
+// 脚本开始
 func loop() {
 	for {
 		//脚本开始时间
 		//timestart := time.Now()
 		if run == true {
-			switch 目标数量 {
-			case "单体":
-				cast(死亡飞轮)
-				cast(狂野怒火)
-				cast(倒刺射击)
-				cast(杀戮命令)
-				cast(眼镜蛇射击)
-				cast(夺命射击)
-			default:
-				cast(死亡飞轮)
-				cast(狂野怒火)
-				cast(多重射击)
-				cast(倒刺射击)
-				cast(杀戮命令)
-				cast(夺命射击)
-			}
+			cast(始源之潮)
+			cast(风暴打击)
+			cast(野性狼魂)
+			cast(毁灭闪电)
+			cast(霜刃打击)
+			cast(冰霜震击)
+			cast(裂地术)
+			cast(毁灭之风)
 		} else {
 			run = <-ch
 		}
@@ -167,13 +168,16 @@ func fork() {
 		switch char {
 		case '7':
 			cast(饰品药水)
-			cast(荒野的召唤)
+		case '8':
+			cast(闪电箭)
+		case '9':
+			cast(闪电链)
 		case '1':
 			cast(大红瓶)
 		case '2':
 			cast(治疗石)
 		case '3':
-			cast(意气风发)
+			cast(治疗之涌)
 		default:
 
 		}
@@ -202,6 +206,7 @@ func cast(spell int64) {
 	case "右滚":
 		k0 = "right"
 	default:
+
 	}
 	presskey(k0, k1n)
 }
@@ -215,13 +220,10 @@ func presskey(k0 string, k1n []string) {
 // robotgo的鼠标滚轮操作
 func wheelkey(k0 string, k1n []string) {
 	for _, v := range k1n {
-		//按下按键
 		robotgo.KeyToggle(v, "down")
 	}
-	//滚动鼠标
 	robotgo.ScrollDir(1, k0)
 	for _, v := range k1n {
-		//抬起按键
 		robotgo.KeyToggle(v, "up")
 	}
 }
