@@ -7,6 +7,7 @@ import (
 	hook "github.com/robotn/gohook"
 	"os"
 	"runtime"
+	"time"
 )
 
 // 脚本循环的频率
@@ -98,16 +99,16 @@ func shortcutkey() {
 			if ev.Rawcode == 57 {
 				目标数量 = "AOE"
 			}
-			//按快捷键小键盘"7"大红瓶
-			if ev.Rawcode == 103 {
+			//按快捷键小键盘"1"大红瓶
+			if ev.Rawcode == 49 {
 				cast(大红瓶)
 			}
-			//按快捷键小键盘"5"术士治疗石35
-			if ev.Rawcode == 101 {
+			//按快捷键小键盘"2"术士治疗石35
+			if ev.Rawcode == 50 {
 				cast(治疗石)
 			}
-			//按快捷键小键盘"9"加血34
-			if ev.Rawcode == 105 {
+			//按快捷键小键盘"3"加血34
+			if ev.Rawcode == 51 {
 				cast(意气风发)
 			}
 		}
@@ -129,6 +130,7 @@ func start() {
 			cast(眼镜蛇射击)
 			cast(夺命射击)
 		case "爆发":
+			time.Sleep(time.Second)
 			cast(荒野的召唤)
 			cast(饰品药水)
 			目标数量 = "AOE"
