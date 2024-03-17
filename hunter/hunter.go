@@ -42,7 +42,7 @@ var SpellKeyMap = map[int64][]string{
 	束缚射击:  []string{"l", "ctrl"},
 	倒刺射击:  []string{"j"},
 	杀戮命令:  []string{"k"},
-	狂野怒火:  []string{"5", "shift"},
+	狂野怒火:  []string{"i", "shift"},
 	死亡飞轮:  []string{"l", "shift"},
 	夺命射击:  []string{"k", "ctrl"},
 	荒野的召唤: []string{"u", "shift"},
