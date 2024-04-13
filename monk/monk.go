@@ -5,13 +5,15 @@ import (
 	"fmt"
 	"github.com/go-vgo/robotgo"
 	hook "github.com/robotn/gohook"
+	"log/slog"
 	"os"
 	"runtime"
 	"time"
 )
 
 // 脚本循环的频率
-// const FREQUENCY int64 = 10
+const FREQUENCY int64 = 50
+
 var stop bool
 
 // 生成可以取消的 context
@@ -204,16 +206,16 @@ func spell2key(spell int64) (key []string) {
 	return key
 }
 
-//func delay(timestart, timeend time.Time) {
-//	timelong := timeend.Sub(timestart).Microseconds()
-//	//脚本每次循环的周期
-//	var cycle int64 = 1000000 / FREQUENCY
-//	slog.Info("周期=", cycle)
-//	delaytime := cycle - timelong
-//	slog.Info("delaytime=", delaytime)
-//	time.Sleep(time.Duration(delaytime * 1000))
-//	slog.Info("Sleep:", time.Duration(delaytime*1000))
-//}
+func delay(timestart, timeend time.Time) {
+	timelong := timeend.Sub(timestart).Microseconds()
+	//脚本每次循环的周期
+	var cycle int64 = 1000000 / FREQUENCY
+	slog.Info("周期=", cycle)
+	delaytime := cycle - timelong
+	slog.Info("delaytime=", delaytime)
+	time.Sleep(time.Duration(delaytime * 1000))
+	slog.Info("Sleep:", time.Duration(delaytime*1000))
+}
 
 // 根据暂停flag判断是否暂停
 func timedelay() {
