@@ -31,11 +31,15 @@ const (
 	幻灭踢
 	真气波
 	屏气凝神
+	风火雷电
+	移花接木
+	骨尘酒
 	加血
 	饰品药水
 	大红瓶
 	治疗石
 	打断
+	切换目标
 )
 
 // 技能和按键映射
@@ -51,11 +55,15 @@ var SpellKeyMap = map[int64][]string{
 	幻灭踢:    []string{"L", "ctrl"},
 	真气波:    []string{"J", "shift"},
 	屏气凝神:   []string{"U", "ctrl"},
+	风火雷电:   []string{"K", "ctrl"},
+	移花接木:   []string{"I", "shift"},
+	骨尘酒:    []string{"I", "ctrl"},
 	加血:     []string{","},
 	饰品药水:   []string{"[", "ctrl", "shift"},
 	大红瓶:    []string{";"},
 	治疗石:    []string{"'"},
 	打断:     []string{"."},
+	切换目标:   []string{"]"},
 }
 
 func main() {
@@ -91,17 +99,17 @@ func shortcutkey() {
 			if ev.Rawcode == 48 {
 				cast(打断)
 			}
-			//按快捷键“8”为单体
+			//按快捷键“8”为爆发
 			if ev.Rawcode == 56 {
-				目标数量 = "单体AOE"
+				目标数量 = "爆发"
 			}
-			//按快捷键“7”为爆发
+			//按快捷键“7”为斩杀
 			//if ev.Rawcode == 55 {
 			//	目标数量 = "爆发"
 			//}
 			//按快捷键“9”为AOE
 			if ev.Rawcode == 57 {
-				目标数量 = "爆发"
+				目标数量 = "AOE"
 			}
 			//按快捷键小键盘"1"大红瓶
 			if ev.Rawcode == 49 {
@@ -127,22 +135,26 @@ func start() {
 		//timestart := time.Now()
 		switch 目标数量 {
 		case "单体AOE":
-			cast(风领主之击)
+			cast(切换目标)
+			cast(移花接木)
 			cast(召唤白虎雕像)
 			cast(白虎下凡)
-			cast(怒雷破)
-			cast(旭日东升踢)
+			cast(骨尘酒)
 			cast(猛虎掌)
+			cast(风领主之击)
+			cast(旭日东升踢)
 			cast(幻灭踢)
 			cast(真气波)
-			cast(神鹤引项踢)
 		case "爆发":
 			time.Sleep(time.Second)
 			cast(饰品药水)
 			cast(屏气凝神)
+			cast(怒雷破)
 			目标数量 = "单体AOE"
-		default:
-
+		case "AOE":
+			time.Sleep(time.Second)
+			cast(神鹤引项踢)
+			目标数量 = "单体AOE"
 		}
 		//脚本结束时间
 		//timeend := time.Now()
