@@ -35,6 +35,8 @@ const (
 	大红瓶
 	治疗石
 	打断
+	停止施法
+	停止攻击
 )
 
 // 技能和按键映射
@@ -54,6 +56,8 @@ var SpellKeyMap = map[int64][]string{
 	大红瓶:   []string{";"},
 	治疗石:   []string{"'"},
 	打断:    []string{"."},
+	停止施法:  []string{"i", "ctrl"},
+	停止攻击:  []string{"u", "alt"},
 }
 
 func main() {
@@ -80,6 +84,8 @@ func shortcutkey() {
 			//按快捷键“6”暂停脚本
 			if ev.Rawcode == 54 {
 				stop = true
+				cast(停止施法)
+				cast(停止攻击)
 			}
 			//按快捷键小键盘“-”停止脚本软件
 			if ev.Rawcode == 109 {
@@ -95,7 +101,10 @@ func shortcutkey() {
 			}
 			//按快捷键“7”为爆发
 			if ev.Rawcode == 55 {
-				目标数量 = "爆发"
+				cast(停止施法)
+				cast(停止攻击)
+				cast(饰品药水)
+				cast(荒野的召唤)
 			}
 			//按快捷键“9”为AOE
 			if ev.Rawcode == 57 {
@@ -131,11 +140,6 @@ func start() {
 			cast(杀戮命令)
 			cast(眼镜蛇射击)
 			cast(夺命射击)
-		case "爆发":
-			time.Sleep(time.Second)
-			cast(荒野的召唤)
-			cast(饰品药水)
-			目标数量 = "AOE"
 		case "AOE":
 			cast(死亡飞轮)
 			cast(狂野怒火)
