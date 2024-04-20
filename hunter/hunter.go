@@ -94,7 +94,8 @@ func shortcutkey() {
 			}
 			//按快捷键“0”为打断
 			if ev.Rawcode == 48 {
-				cast(打断)
+				数量 = 目标数量
+				目标数量 = "打断"
 			}
 			//按快捷键“8”为单体
 			if ev.Rawcode == 56 {
@@ -132,6 +133,11 @@ func start() {
 		//脚本开始时间
 		//timestart := time.Now()
 		switch 目标数量 {
+		case "打断":
+			cast(停止施法)
+			cast(停止攻击)
+			cast(打断)
+			目标数量 = 数量
 		case "单体":
 			cast(死亡飞轮)
 			cast(狂野怒火)
