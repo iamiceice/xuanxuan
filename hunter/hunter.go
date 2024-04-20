@@ -47,7 +47,7 @@ var SpellKeyMap = map[int64][]string{
 	束缚射击:  []string{"l", "ctrl"},
 	倒刺射击:  []string{"j"},
 	杀戮命令:  []string{"k"},
-	狂野怒火:  []string{"i", "shift"},
+	狂野怒火:  []string{"y", "shift"},
 	死亡飞轮:  []string{"l", "shift"},
 	夺命射击:  []string{"k", "ctrl"},
 	荒野的召唤: []string{"u", "shift"},
@@ -57,7 +57,7 @@ var SpellKeyMap = map[int64][]string{
 	大红瓶:   []string{";"},
 	治疗石:   []string{"'"},
 	打断:    []string{"."},
-	停止施法:  []string{"i", "ctrl"},
+	停止施法:  []string{"y", "ctrl"},
 	停止攻击:  []string{"u", "alt"},
 }
 
