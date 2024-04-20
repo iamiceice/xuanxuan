@@ -19,6 +19,7 @@ var stop bool
 // 生成可以取消的 context
 var ctx, cancel = context.WithCancel(context.Background())
 var 目标数量 string = "AOE"
+var 数量 string
 
 const (
 	多重射击 int64 = 1000 + iota
@@ -101,10 +102,8 @@ func shortcutkey() {
 			}
 			//按快捷键“7”为爆发
 			if ev.Rawcode == 55 {
-				cast(停止施法)
-				cast(停止攻击)
-				cast(饰品药水)
-				cast(荒野的召唤)
+				数量 = 目标数量
+				目标数量 = "爆发"
 			}
 			//按快捷键“9”为AOE
 			if ev.Rawcode == 57 {
@@ -147,6 +146,13 @@ func start() {
 			cast(倒刺射击)
 			cast(杀戮命令)
 			cast(夺命射击)
+		case "爆发":
+			cast(停止施法)
+			cast(停止攻击)
+			cast(饰品药水)
+			time.Sleep(time.Second)
+			cast(荒野的召唤)
+			目标数量 = 数量
 		}
 		//脚本结束时间
 		//timeend := time.Now()
