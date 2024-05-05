@@ -136,7 +136,6 @@ func start() {
 		case "打断":
 			cast(停止施法)
 			cast(停止攻击)
-			time.Sleep(200 * time.Millisecond)
 			cast(打断)
 			目标数量 = 数量
 		case "单体":
